@@ -1,4 +1,4 @@
-from flask import Flask,request,make_response,jsonify
+from flask import Flask,request,make_response,jsonify,json,Response
 from ptt_crawler import PTT_Crawler
 
 app = Flask('flask-api')
@@ -15,7 +15,12 @@ def run_Crawler():
         page = request.get_json().get('page',1)
         crawler = PTT_Crawler(board = board,page = page)
     res = crawler.run()
-    return jsonify(res)
+    format = json.dumps(res, ensure_ascii=False)
+    return Response(
+        response= format,
+        mimetype="application/json",
+        status=200
+    )
 
 if __name__ == '__main__':
     app.run(port=8000)
